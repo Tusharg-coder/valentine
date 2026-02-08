@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Comic Sans MS', cursive;
+    }
+
+    body {
+        height: 100vh;
+        overflow: hidden;
+        background: radial-gradient(circle, #ffdde1, #ee9ca7);
+    }
+
+    /* Flower background */
+    .flowers {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            url("https://i.imgur.com/5cX1R4R.png");
+        background-size: 120px;
+        opacity: 0.3;
+        z-index: -1;
+    }
+
+    .container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 3rem;
+        color: #c2185b;
+        margin-bottom: 40px;
+    }
+
+    .buttons {
+        position: relative;
+        width: 300px;
+        height: 150px;
+    }
+
+    button {
+        padding: 15px 35px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        position: absolute;
+        transition: 0.3s;
+    }
+
+    #yes {
+        left: 30px;
+        background: #ff4081;
+        color: white;
+    }
+
+    #no {
+        right: 30px;
+        background: #9e9e9e;
+        color: white;
+    }
+
+    /* Second screen */
+    .celebrate {
+        display: none;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background: black;
+        color: white;
+        text-align: center;
+    }
+
+    .celebrate h2 {
+        font-size: 3rem;
+        color: #ff69b4;
+        margin-bottom: 20px;
+    }
+
+    .celebrate p {
+        font-size: 1.5rem;
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+
+<div class="flowers"></div>
+
+<div class="container" id="page1">
+    <h1>Will you be my Valentine? 💕</h1>
+    <div class="buttons">
+        <button id="yes">YES 💖</button>
+        <button id="no">NO 🙈</button>
+    </div>
+</div>
+
+<div class="celebrate" id="page2">
+    <canvas id="fireworks"></canvas>
+    <h2>YAYYY!!! 🎆💖</h2>
+    <p>You just made my heart the happiest ❤️<br>
+       Happy Valentine’s Day, my love 🌹</p>
+</div>
+
+<script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const page1 = document.getElementById("page1");
+    const page2 = document.getElementById("page2");
+
+    noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * 200;
+        const y = Math.random() * 100;
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    });
+
+    yesBtn.addEventListener("click", () => {
+        page1.style.display = "none";
+        page2.style.display = "flex";
+        startFireworks();
+    });
+
+    /* Fireworks */
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function random(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function startFireworks() {
+        setInterval(() => {
+            const x = random(0, canvas.width);
+            const y = random(0, canvas.height / 2);
+            for (let i = 0; i < 50; i++) {
+                drawParticle(x, y);
+            }
+        }, 700);
+    }
+
+    function drawParticle(x, y) {
+        const radius = random(1, 3);
+        const angle = random(0, Math.PI * 2);
+        const speed = random(1, 5);
+        let life = 60;
+
+        function animate() {
+            if (life <= 0) return;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = `hsl(${random(0, 360)},100%,60%)`;
+            ctx.fill();
+            x += Math.cos(angle) * speed;
+            y += Math.sin(angle) * speed;
+            life--;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+</script>
+
+</body>
+</html>
